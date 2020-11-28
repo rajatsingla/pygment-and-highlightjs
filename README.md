@@ -1,5 +1,5 @@
-# pygment-and-highlightjs
-Compare the output of pygment and highlightjs, side by side
+# pygments-and-highlightjs
+Compare the output of pygments and highlightjs, side by side
 
 Using python server for pygments -> https://rajat.pythonanywhere.com/?language=python&text=%22whatever%22
 
