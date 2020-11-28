@@ -1,7 +1,7 @@
 # pygment-and-highlightjs
 Compare the output of pygment and highlightjs, side by side
 
-
+Using python server for pygments -> https://rajat.pythonanywhere.com/?language=python&text=%22whatever%22
 
 
 [https://rajatsingla.github.io/pygment-and-highlightjs/](https://rajatsingla.github.io/pygment-and-highlightjs/)
