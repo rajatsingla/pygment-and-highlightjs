@@ -1,0 +1,204 @@
+<head>
+  <style>
+    body {
+      margin: 20px;
+      padding: 20px;
+      font-family: IBM Plex Mono,monospace;
+      color: #abb2bf;
+      font-size: 16px;
+      line-height: 26px;
+    }
+    .code_block {
+        background: #282c34;
+        display: block;
+        margin: 25px 0;
+        padding: 25px;
+        max-height: 400px;
+        border-radius: 8px;
+        overflow-x: auto;
+    }
+    .result {
+      margin-top: 50px;
+    }
+    .column {
+      display: flex;
+    }
+    .column .half {
+      flex: auto;
+      margin: 5px;
+      width: 50%;
+    }
+    button {
+      background: #ff5454d9;
+      min-width: 45px;
+      font-size: 13px;
+      color: #fff;
+      line-height: 15px;
+      letter-spacing: .56px;
+      font-weight: 600;
+      padding: 8px 12px;
+      border-radius: 8px;
+      white-space: nowrap;
+      cursor: pointer;
+      border: none;
+      box-shadow: 5px 0 10px 2px hsla(0,0%,60.8%,.1), 0 5px 10px 2px hsla(0,0%,60.8%,.1);
+    }
+    pre {
+      margin: 0;
+    }
+    div.message {
+      color: green;
+      padding-top: 20px;
+    }
+    .normal-text {
+      color: #000000e0;
+    }
+  </style>
+</head>
+
+<body>
+  <h2>
+    Compare the output of pygment and highlightjs, side by side
+  </h2>
+  <div>
+    <label for="theme">Theme:</label>
+    <select name="theme" id="theme">
+      <option value="atom-one-dark">atom-one-dark</option>
+      <option value="dracula">dracula</option>
+      <option value="default">default</option>
+    </select>
+    <label for="lang">Language:</label>
+    <select name="lang" id="lang">
+      <option value="python">python</option>
+      <option value="javascript">javascript</option>
+      <option value="go">go</option>
+      <option value="bash">bash</option>
+      <option value="css">css</option>
+      <option value="scss">scss</option>
+      <option value="ruby">ruby</option>
+      <option value="php">php</option>
+      <option value="typescript">typescript</option>
+      <option value="JSON">JSON</option>
+      <option value="perl">perl</option>
+      <option value="SQL">SQL</option>
+    </select>
+  </div>
+  <div id="code_editor">
+    <pre class="code_block" contenteditable="true"># Python program to shuffle a deck of card
+
+# importing modules
+import itertools, random
+
+# make a deck of cards
+deck = list(itertools.product(range(1,14),['Spade','Heart','Diamond','Club']))
+
+# shuffle the cards
+random.shuffle(deck)
+
+# draw five cards
+print("You got:")
+for i in range(5):
+   print(deck[i][0], "of", deck[i][1])</pre>
+  </div>
+  <button onclick="highlight()" id="button">Highlight</button>
+  <div class="message" id="message">
+  </div>
+  <div class="result column">
+    <div class="half">
+      <strong>highlightjs</strong>
+      <pre class="code_block hljs" id="highlightjs"></pre>
+    </div>
+    <div class="half">
+      <strong>Pygment</strong>
+      <pre class="code_block" id="pygment" ></pre>
+    </div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.0/highlight.min.js"></script>
+  <script>
+    const THEMES_HLJS = {
+      "atom-one-dark": ".hljs{display:block;overflow-x:auto;color:#abb2bf;background:#282c34}.hljs-comment,.hljs-quote{color:#5c6370;font-style:italic}.hljs-doctag,.hljs-formula,.hljs-keyword{color:#c678dd}.hljs-deletion,.hljs-name,.hljs-section,.hljs-selector-tag,.hljs-subst{color:#e06c75}.hljs-literal{color:#56b6c2}.hljs-addition,.hljs-attribute,.hljs-meta-string,.hljs-regexp,.hljs-string{color:#98c379}.hljs-built_in,.hljs-class .hljs-title{color:#e6c07b}.hljs-attr,.hljs-number,.hljs-selector-attr,.hljs-selector-class,.hljs-selector-pseudo,.hljs-template-variable,.hljs-type,.hljs-variable{color:#d19a66}.hljs-bullet,.hljs-link,.hljs-meta,.hljs-selector-id,.hljs-symbol,.hljs-title{color:#61aeee}.hljs-emphasis{font-style:italic}.hljs-strong{font-weight:700}.hljs-link{text-decoration:underline} ",
+
+      "dracula": ".hljs{display:block;overflow-x:auto;background:#282a36}.hljs-keyword,.hljs-link,.hljs-literal,.hljs-section,.hljs-selector-tag{color:#8be9fd}.hljs-function .hljs-keyword{color:#ff79c6}.hljs,.hljs-subst{color:#f8f8f2}.hljs-addition,.hljs-attribute,.hljs-bullet,.hljs-name,.hljs-string,.hljs-symbol,.hljs-template-tag,.hljs-template-variable,.hljs-title,.hljs-type,.hljs-variable{color:#f1fa8c}.hljs-comment,.hljs-deletion,.hljs-meta,.hljs-quote{color:#6272a4}.hljs-doctag,.hljs-keyword,.hljs-literal,.hljs-name,.hljs-section,.hljs-selector-tag,.hljs-strong,.hljs-title,.hljs-type{font-weight:700}.hljs-emphasis{font-style:italic}",
+
+    }
+    const THEMES_PYGMENT = {
+      "atom-one-dark": ".highlight,pre.highlight{background:#282c34;color:#abb2bf}.highlight pre{background:#282c34}.highlight .hll{background:#282c34}.highlight .c{color:#5c6370;font-style:italic}.highlight .err{color:#960050;background-color:#1e0010}.highlight .k{color:#c678dd}.highlight .l{color:#98c379}.highlight .n{color:#abb2bf}.highlight .o{color:#abb2bf}.highlight .p{color:#abb2bf}.highlight .cm{color:#5c6370;font-style:italic}.highlight .cp{color:#5c6370;font-style:italic}.highlight .c1{color:#5c6370;font-style:italic}.highlight .cs{color:#5c6370;font-style:italic}.highlight .ge{font-style:italic}.highlight .gs{font-weight:700}.highlight .kc{color:#c678dd}.highlight .kd{color:#c678dd}.highlight .kn{color:#c678dd}.highlight .kp{color:#c678dd}.highlight .kr{color:#c678dd}.highlight .kt{color:#c678dd}.highlight .ld{color:#98c379}.highlight .m{color:#d19a66}.highlight .s{color:#98c379}.highlight .na{color:#d19a66}.highlight .nb{color:#e5c07b}.highlight .nc{color:#e5c07b}.highlight .no{color:#e5c07b}.highlight .nd{color:#e5c07b}.highlight .ni{color:#e5c07b}.highlight .ne{color:#e5c07b}.highlight .nf{color:#abb2bf}.highlight .nl{color:#e5c07b}.highlight .nn{color:#abb2bf}.highlight .nx{color:#abb2bf}.highlight .py{color:#e5c07b}.highlight .nt{color:#e06c75}.highlight .nv{color:#e5c07b}.highlight .ow{font-weight:700}.highlight .w{color:#f8f8f2}.highlight .mf{color:#d19a66}.highlight .mh{color:#d19a66}.highlight .mi{color:#d19a66}.highlight .mo{color:#d19a66}.highlight .sb{color:#98c379}.highlight .sc{color:#98c379}.highlight .sd{color:#98c379}.highlight .s2{color:#98c379}.highlight .se{color:#98c379}.highlight .sh{color:#98c379}.highlight .si{color:#98c379}.highlight .sx{color:#98c379}.highlight .sr{color:#56b6c2}.highlight .s1{color:#98c379}.highlight .ss{color:#56b6c2}.highlight .bp{color:#e5c07b}.highlight .vc{color:#e5c07b}.highlight .vg{color:#e5c07b}.highlight .vi{color:#e06c75}.highlight .il{color:#d19a66}.highlight .gu{color:#75715e}.highlight .gd{color:#f92672}.highlight .gi{color:#a6e22e}",
+
+      "dracula": ".highlight .hll{background-color:#f1fa8c}.highlight{background:#282a36;color:#f8f8f2}.highlight .c{color:#6272a4}.highlight .err{color:#f8f8f2}.highlight .g{color:#f8f8f2}.highlight .k{color:#ff79c6}.highlight .l{color:#f8f8f2}.highlight .n{color:#f8f8f2}.highlight .o{color:#ff79c6}.highlight .x{color:#f8f8f2}.highlight .p{color:#f8f8f2}.highlight .ch{color:#6272a4}.highlight .cm{color:#6272a4}.highlight .cp{color:#ff79c6}.highlight .cpf{color:#6272a4}.highlight .c1{color:#6272a4}.highlight .cs{color:#6272a4}.highlight .gd{color:#8b080b}.highlight .ge{color:#f8f8f2;text-decoration:underline}.highlight .gr{color:#f8f8f2}.highlight .gh{color:#f8f8f2;font-weight:700}.highlight .gi{color:#f8f8f2;font-weight:700}.highlight .go{color:#44475a}.highlight .gp{color:#f8f8f2}.highlight .gs{color:#f8f8f2}.highlight .gu{color:#f8f8f2;font-weight:700}.highlight .gt{color:#f8f8f2}.highlight .kc{color:#ff79c6}.highlight .kd{color:#8be9fd;font-style:italic}.highlight .kn{color:#ff79c6}.highlight .kp{color:#ff79c6}.highlight .kr{color:#ff79c6}.highlight .kt{color:#8be9fd}.highlight .ld{color:#f8f8f2}.highlight .m{color:#bd93f9}.highlight .s{color:#f1fa8c}.highlight .na{color:#50fa7b}.highlight .nb{color:#8be9fd;font-style:italic}.highlight .nc{color:#50fa7b}.highlight .no{color:#f8f8f2}.highlight .nd{color:#f8f8f2}.highlight .ni{color:#f8f8f2}.highlight .ne{color:#f8f8f2}.highlight .nf{color:#50fa7b}.highlight .nl{color:#8be9fd;font-style:italic}.highlight .nn{color:#f8f8f2}.highlight .nx{color:#f8f8f2}.highlight .py{color:#f8f8f2}.highlight .nt{color:#ff79c6}.highlight .nv{color:#8be9fd;font-style:italic}.highlight .ow{color:#ff79c6}.highlight .w{color:#f8f8f2}.highlight .mb{color:#bd93f9}.highlight .mf{color:#bd93f9}.highlight .mh{color:#bd93f9}.highlight .mi{color:#bd93f9}.highlight .mo{color:#bd93f9}.highlight .sa{color:#f1fa8c}.highlight .sb{color:#f1fa8c}.highlight .sc{color:#f1fa8c}.highlight .dl{color:#f1fa8c}.highlight .sd{color:#f1fa8c}.highlight .s2{color:#f1fa8c}.highlight .se{color:#f1fa8c}.highlight .sh{color:#f1fa8c}.highlight .si{color:#f1fa8c}.highlight .sx{color:#f1fa8c}.highlight .sr{color:#f1fa8c}.highlight .s1{color:#f1fa8c}.highlight .ss{color:#f1fa8c}.highlight .bp{color:#f8f8f2;font-style:italic}.highlight .fm{color:#50fa7b}.highlight .vc{color:#8be9fd;font-style:italic}.highlight .vg{color:#8be9fd;font-style:italic}.highlight .vi{color:#8be9fd;font-style:italic}.highlight .vm{color:#8be9fd;font-style:italic}.highlight .il{color:#bd93f9}",
+
+    }
+    function add_style_tag() {
+      var head = document.head || document.getElementsByTagName('head')[0];
+      var style = document.createElement('style');
+      head.appendChild(style);
+      style.type = 'text/css';
+      style.id = "code_block_css";
+    }
+
+    function add_css_for_code_block(css) {
+      var style = document.getElementById("code_block_css");
+      style.innerHTML = css;
+    }
+
+    function highlight() {
+      var button = document.getElementById("button");
+      var message = document.getElementById("message");
+      message.innerHTML = "";
+      button.disabled = true;
+      button.textContent = "loading..";
+      var code_editor = document.getElementById("code_editor");
+      var code_text = code_editor.innerText;
+      var lang = document.getElementById("lang").value;
+      var theme = document.getElementById("theme").value;
+      code_text = code_text.trim();
+      var urlComponent = `?language=${encodeURIComponent(lang)}&text=${encodeURIComponent(code_text)}`;
+      var url = `http://rajat.pythonanywhere.com/${urlComponent}`;
+      document.getElementById("highlightjs").innerHTML = code_text;
+      document.getElementById("pygment").innerHTML = code_text;
+      fetch(url).then(function(response) {
+        return response.json();
+      }).then(function(data) {
+        document.getElementById("pygment").innerHTML = data.html;
+        button.disabled = false;
+        button.textContent = "Highlight";
+        message.innerHTML = `Success! chosen language was: ${lang} and theme: ${theme}`;
+        message.scrollIntoView({behavior: "smooth"});
+        console.log(data);
+      }).catch(function() {
+        console.log("Booo");
+      });
+      add_css_for_code_block(THEMES_HLJS[theme] + " " + THEMES_PYGMENT[theme]);
+      const highlightedCode = hljs.highlight(lang, code_text).value;
+      document.getElementById("highlightjs").innerHTML = highlightedCode;
+    }
+
+    const target = document.querySelector('div#code_editor pre');
+
+    target.addEventListener('paste', (event) => {
+        let paste = (event.clipboardData || window.clipboardData).getData('text');
+
+        const selection = window.getSelection();
+        if (!selection.rangeCount) return false;
+        selection.deleteFromDocument();
+        selection.getRangeAt(0).insertNode(document.createTextNode(paste));
+
+        event.preventDefault();
+    });
+
+    add_style_tag();
+    add_css_for_code_block();
+  </script>
+</body>
+
+<footer>
+  <h3 class="normal-text">CSS Sources</h3>
+  <div>
+      <a href="https://github.com/highlightjs/highlight.js/blob/master/src/styles" target="new">Highlightjs styles</a>
+      <br/>
+      <a href="https://github.com/mgyongyosi/OneDarkJekyll/blob/master/syntax-one-dark.css" target="new">Pygment style for atom-one-dark</a>
+      <br/>
+      <a href="https://github.com/dracula/pygments/blob/master/dracula.css" target="new">Pygment style for dracula</a>
+  </div>
+  <span class="normal-text">No custom intervantion in highlightjs and pygment formatting, used default functions.</span>
+
+</footer>
