@@ -1,4 +1,5 @@
 # pygment-and-highlightjs
 Compare the output of pygment and highlightjs, side by side
 
-[https://scrollstack.com/](https://scrollstack.com/)
+
+<a href="https://scrollstack.com/" target="_blank">scrollstack.com</a>
