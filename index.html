@@ -152,7 +152,7 @@ for i in range(5):
       var theme = document.getElementById("theme").value;
       code_text = code_text.trim();
       var urlComponent = `?language=${encodeURIComponent(lang)}&text=${encodeURIComponent(code_text)}`;
-      var url = `http://rajat.pythonanywhere.com/${urlComponent}`;
+      var url = `https://rajat.pythonanywhere.com/${urlComponent}`;
       document.getElementById("highlightjs").innerHTML = code_text;
       document.getElementById("pygment").innerHTML = code_text;
       fetch(url).then(function(response) {
