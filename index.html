@@ -81,6 +81,7 @@
     </select>
     <label for="lang">Language:</label>
     <select name="lang" id="lang">
+      <option value="auto">auto</option>
       <option value="python">python</option>
       <option value="javascript">javascript</option>
       <option value="html">html</option>
@@ -94,6 +95,7 @@
       <option value="JSON">JSON</option>
       <option value="perl">perl</option>
       <option value="SQL">SQL</option>
+      <option value="java">java</option>
     </select>
   </div>
   <div id="code_editor">
@@ -161,20 +163,28 @@ for i in range(5):
       button.textContent = "loading..";
       var code_editor = document.getElementById("code_editor");
       var code_text = code_editor.innerText;
-      var lang = document.getElementById("lang").value;
+      var langSelected = document.getElementById("lang").value;
+      if (langSelected === "auto") {
+        var lang = hljs.highlightAuto(code_text,
+          Array.from(document.getElementById("lang").options).map(
+            (option) => {return option.value}
+          )).language;
+      } else {
+        var lang = langSelected;
+      }
       var theme = document.getElementById("theme").value;
       code_text = code_text.trim();
       var urlComponent = `?language=${encodeURIComponent(lang)}&text=${encodeURIComponent(code_text)}`;
       var url = `https://rajat.pythonanywhere.com/${urlComponent}`;
-      document.getElementById("highlightjs").innerHTML = code_text;
-      document.getElementById("pygment").innerHTML = code_text;
+      document.getElementById("highlightjs").innerHTML = `"${code_text}"`;
+      document.getElementById("pygment").innerHTML = `"${code_text}"`;
       fetch(url).then(function(response) {
         return response.json();
       }).then(function(data) {
         document.getElementById("pygment").innerHTML = data.html;
         button.disabled = false;
         button.textContent = "Highlight";
-        message.innerHTML = `Success! chosen language was: ${lang} and theme: ${theme}`;
+        message.innerHTML = `Success! chosen language was: ${langSelected} ${langSelected === "auto" ? ", detected language is: "+lang : ""} and theme: ${theme}`;
         message.scrollIntoView({behavior: "smooth"});
         console.log(data);
       }).catch(function() {
